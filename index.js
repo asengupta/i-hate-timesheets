@@ -109,22 +109,5 @@ async function listEvents(auth) {
 
         console.log(`${tag} => ${JSON.stringify(groupDuration)}`)
     })
-    // durationsByTag = eventsGroupedByTags.map(group => group.reduce(function(total, currentEvent) {
-    //     const start = new Date(currentEvent.start.dateTime || currentEvent.start.date);
-    //     const end = new Date(currentEvent.end.dateTime || currentEvent.end.date);
-    //     const duration = (end - start) / (1000 * 60 * 60);
-    //     return total + duration
-    // }))
-
-    // console.log(durationsByTag)
-    // accepted_events.map((event, i) => {
-    //     const start = new Date(event.start.dateTime || event.start.date);
-    //     const end = new Date(event.end.dateTime || event.end.date);
-    //     const duration = (end - start) / (1000 * 60 * 60);
-    //     me = event.attendees.find(attendee => attendee.self)
-    //     // console.log(JSON.stringify(event))
-    //     console.log(`${start} - ${end} (${duration}) -> ${event.summary} - ${me.responseStatus} - ${me.comment}`);
-    // });
-}
 
 authorize().then(listEvents).catch(console.error);
