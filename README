@@ -5,4 +5,4 @@ Tool to automatically parse tags from Google calendar invite responses and aggre
 - Put tags in notes in your invite responses. The tool will aggregate the hours of all such tags, for now.
 - Work to show per-day breakdown per code is ongoing.
 
-Work to suitably format for timesheet entry is ongoing.
+Work to suitably format for timesheet entry is ongoing. Will potentially integrate with Salesforce if I feel motivated enough.
