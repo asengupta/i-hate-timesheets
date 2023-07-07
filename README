@@ -1,5 +1,7 @@
 Tool to automatically parse tags from Google calendar invite responses and aggregate hours for timesheets, because I HATE TIMESHEETS!
 
+- You will need to have set up a Google Cloud project with the Calendar API enabled.
+- You will need to have generated the credentials.json to allow the script to access your Google calendar.
 - Put tags in notes in your invite responses. The tool will aggregate the hours of all such tags, for now.
 - Work to show per-day breakdown per code is ongoing.
 
