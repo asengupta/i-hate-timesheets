@@ -7,6 +7,8 @@ const _ = require("lodash");
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
+const ACCEPTED_STATUS = "accepted";
+const EVENT_ORDER_BY_CLAUSE = 'startTime';
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
@@ -80,7 +82,7 @@ async function aggregateEvents(auth) {
         timeMax: end.toISOString(),
         maxResults: 100,
         singleEvents: true,
-        orderBy: 'startTime',
+        orderBy: EVENT_ORDER_BY_CLAUSE,
     });
     const events = res.data.items;
     if (!events || events.length === 0) {
@@ -91,11 +93,10 @@ async function aggregateEvents(auth) {
     console.log(`${events.length} accepted events from ${start} to ${end}:`);
     acceptedEvents = events.filter(event => {
         me = event.attendees.find(attendee => attendee.self)
-        return "accepted" === me.responseStatus
+        return ACCEPTED_STATUS === me.responseStatus
     })
 
     acceptedEventsGroupedByDay = _.groupBy(acceptedEvents, event => new Date(event.start.dateTime).getDay())
-    // console.log(acceptedEventsGroupedByDay)
 
     _.forEach(acceptedEventsGroupedByDay, (events, day) => {
         console.log(`DAY ${day}`)
@@ -110,7 +111,6 @@ async function aggregateEvents(auth) {
                 const start = new Date(currentEvent.start.dateTime || currentEvent.start.date);
                 const end = new Date(currentEvent.end.dateTime || currentEvent.end.date);
                 const duration = (end - start) / (1000 * 60 * 60);
-                // console.log(`${duration}`)
                 return total + duration
             }, 0)
 
