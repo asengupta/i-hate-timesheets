@@ -109,5 +109,6 @@ async function listEvents(auth) {
 
         console.log(`${tag} => ${JSON.stringify(groupDuration)}`)
     })
+}
 
 authorize().then(listEvents).catch(console.error);
