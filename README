@@ -1,0 +1,3 @@
+Tool to automatically parse tags from Google calendar invite responses and aggregate hours for timesheets, because I HATE TIMESHEETS!
+
+Put tags in notes in your invite responses. The tool will aggregate all such tags. Work to suitably format for timesheet entry is ongoing.
