@@ -89,10 +89,8 @@ function myResponse(event) {
  * Lists the next events on the user's primary calendar.
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-async function aggregateEvents(auth) {
+async function aggregateEvents(start, end, auth) {
     const calendar = google.calendar({version: 'v3', auth});
-    const start = new Date(2023, 6, 10);
-    const end = new Date(2023, 6, 15);
     const res = await calendar.events.list({
         calendarId: 'primary',
         timeMin: start.toISOString(),
@@ -144,5 +142,7 @@ async function aggregateEvents(auth) {
     console.log(`Total unaccounted hours: ${MAX_BILLABLE_HOURS - totalDuration}`)
 }
 
+const start = new Date(2023, 6, 10);
+const end = new Date(2023, 6, 15);
 
-authorize().then(aggregateEvents).catch(console.error);
+authorize().then(auth => aggregateEvents(start, end, auth)).catch(console.error);
