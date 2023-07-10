@@ -9,6 +9,7 @@ const _ = require("lodash");
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const ACCEPTED_STATUS = "accepted";
 const EVENT_ORDER_BY_CLAUSE = 'startTime';
+const MAX_BILLABLE_HOURS = 40;
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
@@ -68,6 +69,13 @@ async function authorize() {
     return client;
 }
 
+function eventDuration(currentEvent) {
+    const start = new Date(currentEvent.start.dateTime || currentEvent.start.date);
+    const end = new Date(currentEvent.end.dateTime || currentEvent.end.date);
+    const duration = (end - start) / (1000 * 60 * 60);
+    return duration;
+}
+
 /**
  * Lists the next events on the user's primary calendar.
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
@@ -96,7 +104,8 @@ async function aggregateEvents(auth) {
         return ACCEPTED_STATUS === me.responseStatus
     })
 
-    acceptedEventsGroupedByDay = _.groupBy(acceptedEvents, event => new Date(event.start.dateTime).getDay())
+    const totalDuration = acceptedEvents.reduce((totalHours, currentEvent) => totalHours + eventDuration(currentEvent), 0)
+    const acceptedEventsGroupedByDay = _.groupBy(acceptedEvents, event => new Date(event.start.dateTime).getDay())
 
     _.forEach(acceptedEventsGroupedByDay, (events, day) => {
         console.log(`DAY ${day}`)
@@ -108,9 +117,7 @@ async function aggregateEvents(auth) {
 
         _.forEach(eventsGroupedByTags, (group, tag) => {
             groupDuration = group.reduce(function(total, currentEvent) {
-                const start = new Date(currentEvent.start.dateTime || currentEvent.start.date);
-                const end = new Date(currentEvent.end.dateTime || currentEvent.end.date);
-                const duration = (end - start) / (1000 * 60 * 60);
+                const duration = eventDuration(currentEvent);
                 return total + duration
             }, 0)
 
@@ -118,6 +125,11 @@ async function aggregateEvents(auth) {
         })
         console.log()
     })
+
+    console.log(`Total hours accounted for: ${totalDuration}`)
+    console.log(`Total unaccounted hours: ${MAX_BILLABLE_HOURS - totalDuration}`)
+
 }
+
 
 authorize().then(aggregateEvents).catch(console.error);
