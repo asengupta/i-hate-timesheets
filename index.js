@@ -15,6 +15,14 @@ const SUMMARY_BUSY = "Busy";
 const SUMMARY_FOCUS_TIME = "Focus time";
 const COMMENT_FOCUS_TIME = "FOCUS_TIME";
 
+const numberToDayMap = {
+    1: "Monday",
+    2: "Tuesday",
+    3: "Wednesday",
+    4: "Thursday",
+    5: "Friday"
+}
+
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
@@ -121,7 +129,7 @@ async function aggregateEvents(start, end, auth) {
     const acceptedEventsGroupedByDay = _.groupBy(acceptedEvents, event => new Date(event.start.dateTime).getDay())
 
     _.forEach(acceptedEventsGroupedByDay, (events, day) => {
-        console.log(`DAY ${day}`)
+        console.log(`DAY: ${numberToDayMap[day]}`)
         console.log("-----------")
         const eventsGroupedByTags = _.groupBy(events, event => {
             return myResponse(event).comment
