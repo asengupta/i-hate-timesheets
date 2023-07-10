@@ -106,7 +106,7 @@ async function aggregateEvents(start, end, auth) {
     }
 
     console.log(`${events.length} accepted events from ${start} to ${end}:`);
-    acceptedEvents = events.filter(event => {
+    const acceptedEvents = events.filter(event => {
         const me = event.attendees.find(attendee => attendee.self)
         return ACCEPTED_STATUS === me.responseStatus
     })
@@ -123,12 +123,12 @@ async function aggregateEvents(start, end, auth) {
     _.forEach(acceptedEventsGroupedByDay, (events, day) => {
         console.log(`DAY ${day}`)
         console.log("-----------")
-        eventsGroupedByTags = _.groupBy(events, event => {
+        const eventsGroupedByTags = _.groupBy(events, event => {
             return myResponse(event).comment
         })
 
         _.forEach(eventsGroupedByTags, (group, tag) => {
-            groupDuration = group.reduce(function(total, currentEvent) {
+            const groupDuration = group.reduce(function(total, currentEvent) {
                 const duration = eventDuration(currentEvent);
                 return total + duration
             }, 0)
