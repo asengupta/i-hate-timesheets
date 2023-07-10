@@ -10,6 +10,11 @@ const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const ACCEPTED_STATUS = "accepted";
 const EVENT_ORDER_BY_CLAUSE = 'startTime';
 const MAX_BILLABLE_HOURS = 40;
+const NO_UPCOMING_EVENTS_FOUND_MESSAGE = "No upcoming events found.";
+const SUMMARY_BUSY = "Busy";
+const SUMMARY_FOCUS_TIME = "Focus time";
+const COMMENT_FOCUS_TIME = "FOCUS_TIME";
+
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
@@ -98,7 +103,7 @@ async function aggregateEvents(auth) {
     });
     const events = res.data.items;
     if (!events || events.length === 0) {
-        console.log('No upcoming events found.');
+        console.log(NO_UPCOMING_EVENTS_FOUND_MESSAGE);
         return;
     }
 
@@ -109,8 +114,8 @@ async function aggregateEvents(auth) {
     })
 
     acceptedEvents.forEach(event => {
-        if (event.summary.includes("Busy") || event.summary.includes("Focus time")) {
-            myResponse(event).comment = "FOCUS_TIME"
+        if (event.summary.includes(SUMMARY_BUSY) || event.summary.includes(SUMMARY_FOCUS_TIME)) {
+            myResponse(event).comment = COMMENT_FOCUS_TIME
         }
     })
 
