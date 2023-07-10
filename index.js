@@ -128,7 +128,6 @@ async function aggregateEvents(auth) {
 
     console.log(`Total hours accounted for: ${totalDuration}`)
     console.log(`Total unaccounted hours: ${MAX_BILLABLE_HOURS - totalDuration}`)
-
 }
 
 
