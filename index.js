@@ -76,6 +76,10 @@ function eventDuration(currentEvent) {
     return duration;
 }
 
+function myResponse(event) {
+    return event.attendees.find(attendee => attendee.self);
+}
+
 /**
  * Lists the next events on the user's primary calendar.
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
@@ -100,8 +104,14 @@ async function aggregateEvents(auth) {
 
     console.log(`${events.length} accepted events from ${start} to ${end}:`);
     acceptedEvents = events.filter(event => {
-        me = event.attendees.find(attendee => attendee.self)
+        const me = event.attendees.find(attendee => attendee.self)
         return ACCEPTED_STATUS === me.responseStatus
+    })
+
+    acceptedEvents.forEach(event => {
+        if (event.summary.includes("Busy") || event.summary.includes("Focus time")) {
+            myResponse(event).comment = "FOCUS_TIME"
+        }
     })
 
     const totalDuration = acceptedEvents.reduce((totalHours, currentEvent) => totalHours + eventDuration(currentEvent), 0)
@@ -111,8 +121,7 @@ async function aggregateEvents(auth) {
         console.log(`DAY ${day}`)
         console.log("-----------")
         eventsGroupedByTags = _.groupBy(events, event => {
-            me = event.attendees.find(attendee => attendee.self)
-            return me.comment
+            return myResponse(event).comment
         })
 
         _.forEach(eventsGroupedByTags, (group, tag) => {
