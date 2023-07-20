@@ -150,7 +150,7 @@ async function aggregateEvents(start, end, auth) {
     console.log(`Total unaccounted hours: ${MAX_BILLABLE_HOURS - totalDuration}`)
 }
 
-const start = new Date(2023, 6, 10);
-const end = new Date(2023, 6, 15);
+const start = new Date(2023, 6, 17);
+const end = new Date(2023, 6, 21);
 
 authorize().then(auth => aggregateEvents(start, end, auth)).catch(console.error);
